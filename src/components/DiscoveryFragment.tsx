@@ -18,11 +18,11 @@ interface DiscoveryFragmentProps {
 }
 
 const CATEGORIES = [
-  { id: 'all', label: 'All Appliances' },
+  { id: 'all', label: 'All Roastery & Gear' },
+  { id: 'coffee_beans', label: 'Fresh Roasted Beans' },
   { id: 'espresso_machine', label: 'Espresso Machines' },
-  { id: 'blender', label: 'Blenders' },
-  { id: 'stand_mixer', label: 'Stand Mixers' },
-  { id: 'air_fryer', label: 'Air Fryers' },
+  { id: 'grinder', label: 'Precision Grinders' },
+  { id: 'cafe_menu', label: 'In-Cafe Bar & Bakery' },
 ];
 
 export const DiscoveryFragment: React.FC<DiscoveryFragmentProps> = ({
