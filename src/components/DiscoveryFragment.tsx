@@ -11,10 +11,11 @@ import {
   ProtonThemeProvider,
   ProtonSlider,
   ProtonCard,
-  ProtonButton,
   ProtonStatusBadge,
   ProtonInput,
+  ProtonSpinner,
 } from '@dipesh.singh/proton/react';
+import { FilterPills, PriceDisplay, EmptyState } from '@dipesh.singh/commerce-ui';
 import { fetchCatalogProducts } from '../api';
 import { DiscoveryProduct } from '../types';
 
@@ -59,6 +60,7 @@ export const DiscoveryFragment: React.FC<DiscoveryFragmentProps> = ({
   const handlePresetClick = (val: number | null) => {
     if (val === null) {
       setIsFilterActive(false);
+      setMaxHeightSlider(60);
       onClearanceFilterChange?.(null);
     } else {
       setIsFilterActive(true);
@@ -93,23 +95,12 @@ export const DiscoveryFragment: React.FC<DiscoveryFragmentProps> = ({
 
         {/* Filter and Space Qualifier Toolbar */}
         <div className="bg-white rounded-3xl p-5 border border-slate-200 shadow-xs space-y-4">
-          {/* Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-colors ${
-                  selectedCategory === cat.id
-                    ? 'bg-indigo-600 text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+          {/* Category Tabs using FilterPills */}
+          <FilterPills
+            options={CATEGORIES}
+            selectedId={selectedCategory}
+            onSelect={(id) => setSelectedCategory(id)}
+          />
 
           {/* Space Qualifier: Cabinet Height Slider */}
           <div className="pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
@@ -189,22 +180,17 @@ export const DiscoveryFragment: React.FC<DiscoveryFragmentProps> = ({
 
         {/* Product Cards Grid */}
         {isLoading ? (
-          <div className="py-24 text-center">
-            <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+          <div className="py-24 text-center space-y-2">
+            <ProtonSpinner size="lg" variant="coffee" label="Loading collection..." />
             <p className="text-xs text-slate-500 font-medium">Loading collection...</p>
           </div>
         ) : filteredProducts.length === 0 ? (
-          <div className="bg-white rounded-3xl p-12 text-center border border-slate-200">
-            <p className="text-sm font-semibold text-slate-700">No appliances match your criteria.</p>
-            <div className="mt-3 inline-block">
-              <ProtonButton
-                size="sm"
-                onClick={() => handlePresetClick(null)}
-              >
-                Reset Filters
-              </ProtonButton>
-            </div>
-          </div>
+          <EmptyState
+            title="No Appliances Fit Under Selected Clearance"
+            description="Try expanding your kitchen cabinet clearance filter above or choose another category."
+            actionLabel="Reset Filters"
+            onAction={() => handlePresetClick(null)}
+          />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProducts.map((prod) => {
@@ -273,9 +259,7 @@ export const DiscoveryFragment: React.FC<DiscoveryFragmentProps> = ({
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-base font-black text-slate-900">
-                      ${prod.price.toFixed(2)}
-                    </span>
+                    <PriceDisplay cents={Math.round(prod.price * 100)} size="md" />
                     <span className="text-xs font-semibold text-amber-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                       <span>View Details</span>
                       <ArrowRight className="w-3.5 h-3.5" />
