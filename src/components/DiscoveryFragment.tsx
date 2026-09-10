@@ -14,7 +14,7 @@ import {
   ProtonButton,
   ProtonStatusBadge,
   ProtonInput,
-} from 'proton/react';
+} from '@dipeshsingh2012/proton/react';
 import { fetchCatalogProducts } from '../api';
 import { DiscoveryProduct } from '../types';
 
