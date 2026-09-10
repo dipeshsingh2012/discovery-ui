@@ -289,3 +289,4 @@ export const DiscoveryFragment: React.FC<DiscoveryFragmentProps> = ({
     </div>
   );
 };
+export default DiscoveryFragment;
